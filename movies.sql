@@ -1,0 +1,30 @@
+CREATE TABLE movies (
+ 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+ 	title TEXT NOT NULL,
+ 	release_year INTEGER NOT NULL,
+ 	genre TEXT,
+ 	review_date DATE,
+ 	review_score INTEGER,
+ 	review_text TEXT
+ );
+INSERT INTO movies (id, title, release_year, genre, review_date, review_score, review_text) VALUES
+ (1, 'Spider-Man: Across the Spider-Verse', 2023, 'Animation', '2023-06-10', 9, 'A visual masterpiece and a compelling continuation of the Spider-Verse story.'),
+ (2, 'Barbie', 2023, 'Comedy', '2023-07-22', 8, 'An entertaining and thought-provoking comedy with a stellar performance by Margot Robbie.'),
+ (3, 'Oppenheimer', 2023, 'Drama', '2023-08-01', 10, 'Christopher Nolan’s epic biopic of J. Robert Oppenheimer is a cinematic triumph.'),
+ (4, 'Guardians of the Galaxy Vol. 3', 2023, 'Action', '2023-05-05', 7, 'A fun and emotional send-off for the beloved team of misfits.'),
+ (5, 'John Wick: Chapter 4', 2023, 'Action', '2023-03-27', 8, 'Keanu Reeves delivers another action-packed performance in this thrilling sequel.'),
+ (6, 'Elemental', 2023, 'Animation', '2023-06-16', 6, 'A visually stunning film, though the story feels a bit underwhelming compared to previous Pixar hits.'),
+ (7, 'The Flash', 2023, 'Action', '2023-06-15', 5, 'Despite some exciting moments, the film suffers from uneven pacing and plot issues.'),
+ (8, 'Indiana Jones and the Dial of Destiny', 2023, 'Adventure', '2023-06-30', 7, 'A nostalgic return for Indy, though not quite reaching the heights of earlier adventures.'),
+ (9, 'Mission: Impossible - Dead Reckoning Part One', 2023, 'Action', '2023-07-15', 9, 'Tom Cruise continues to impress in this high-stakes action thriller.'),
+ (10, 'Asteroid City', 2023, 'Comedy', '2023-06-23', 7, 'Wes Anderson’s quirky style is on full display in this charming but oddball comedy.'),
+ (11, 'Sound of Freedom', 2023, 'Drama', '2023-07-04', 8, 'A powerful and emotional film that sheds light on an important issue.'),
+ (12, 'Transformers: Rise of the Beasts', 2023, 'Sci-Fi', '2023-06-09', 6, 'A visually engaging spectacle but ultimately a forgettable entry in the franchise.'),
+ (13, 'Fast X', 2023, 'Action', '2023-05-19', 5, 'The Fast saga is beginning to show its age, with diminishing returns on its high-octane formula.'),
+ (14, 'The Super Mario Bros. Movie', 2023, 'Animation', '2023-04-05', 8, 'A fun and nostalgic ride for fans of the iconic video game franchise.'),
+ (15, 'Blue Beetle', 2023, 'Sci-Fi', '2023-08-18', 7, 'An enjoyable superhero origin story that brings freshness to the DC universe.'),
+ (16, 'The Marvels', 2023, 'Action', '2023-11-10', 6, 'Though visually impressive, the film feels a bit disjointed and lacks the emotional depth of other MCU entries.'),
+ (17, 'No Hard Feelings', 2023, 'Comedy', '2023-06-23', 7, 'A raunchy and fun comedy that delivers plenty of laughs, thanks to Jennifer Lawrence’s performance.'),
+ (18, 'Insidious: The Red Door', 2023, 'Horror', '2023-07-07', 6, 'A decent horror sequel that will satisfy fans of the franchise, but it lacks originality.'),
+ (19, 'Strays', 2023, 'Comedy', '2023-08-18', 6, 'A fun but predictable adult comedy that relies heavily on its talking-dog gimmick.'),
+ (20, 'Meg 2: The Trench', 2023, 'Action', '2023-08-04', 5, 'While entertaining at times, the film’s absurd plot makes it hard to take seriously.');
