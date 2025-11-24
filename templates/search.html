@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search Reviews</title>
+        <link rel='stylesheet' href='/static/css/style.css'>
+    </head>
+    <body>
+        <h1>Filter Restaurants</h1>
+        <img src='/static/images/banner.png' height='70'>
+        <form action='/filter' method='GET'>
+            <label for='cuisine'>Cuisine:</label>
+            <select id='cuisine' name='cuisine'>
+                <option value=''>Any</option>
+                <option value='Cuisine'>Cuisine</option>
+                
+            </select>
+            <br><br>
+
+            <label for='score'>Minimum Review Score:</label>
+            <input type='number' id='score' name='score' min='1' max='10'>
+            <br><br>
+
+            <input type='submit' value='Filter restaurants'>
+        </form>
+    </body>
+</html>

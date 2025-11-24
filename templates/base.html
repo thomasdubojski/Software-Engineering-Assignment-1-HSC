@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}TasteTracker{% endblock %}</title>
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <h1>Welcome to the TasteTracker food reviewing Website</h1>
+        <img src='/static/images/banner.jpg' height='384.875' width="980">
+        <h6>Discover and share your favorite culinary experiences!</h6>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        <a href='/'>Return to Home</a>
+    </body>
+</html>
