@@ -1,15 +1,18 @@
+# importing required add-ons
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from sqlalchemy import create_engine, text
 from datetime import datetime
 
 app = Flask(__name__)
 
+# creating engine for site
 engine = create_engine('sqlite:///restaurants.db')
 connection = engine.connect()
 
 @app.route('/uploads/<name>')
 def download_file(name):
     return send_from_directory('uploads/', name)
+
 
 @app.route('/')
 def home():
@@ -18,6 +21,7 @@ def home():
 
     return render_template('index.html', restaurants=result)
 
+# add review page access
 @app.route('/add_review', methods=['GET'])
 def show_form():
     return render_template('add_review.html')
