@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Agile Workflow Diary.md",
+                "file": "Build PWA tools.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Agile Workflow Diary"
+              "title": "Build PWA tools"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "db18185b714f2719",
@@ -180,15 +179,17 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "command-palette:Open command palette": false
     }
   },
   "active": "7deaf43bc22ec627",
   "lastOpenFiles": [
-    "Algorithms.md",
     "Agile Workflow Diary.md",
     "Build PWA tools.md",
+    "Project Overview.pdf",
+    "~$oject Overview.pdf",
+    "mso2074.tmp",
+    "Algorithms.md",
     "Project Requirements and Scope.md",
     "Algorithms",
     "Project Documentation.md",
