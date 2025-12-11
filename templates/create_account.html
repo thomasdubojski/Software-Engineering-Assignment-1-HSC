@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block heading %}Create your account{% endblock %}
+
+{% block text %}We value our users! Create an account below to access new perks.{% endblock %}
+
+{% block content %}
+
+<form action='/create_account' method='POST' enctype='multipart/form-data'>
+    <label for='username'>Username:</label>
+    <input type='text' id='username' name='username'><br><br>
+
+    <label for='password'>Password:</label>
+    <input type='text' id='password' name='password'><br><br>
+
+    <input type='submit' value='Submit Review'>
+</form>
+ 
+{% endblock %}

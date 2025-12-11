@@ -59,3 +59,27 @@ Sprint/Session Focus: Fix and implement functioning venv, install needed addons 
 **Next Step/s
 
 - Make structured pages 
+
+
+# Agile Diary Entry 3 – Developing and Structuring Pages 
+
+Date: 11/12/25  
+Sprint/Session Focus: Start developing and structuring pages to create functional base website
+
+**Planned
+
+- Structure UI/UX for webpages
+- Begin developing features for webpages
+
+**Completed
+
+- Started working on page functions and features
+
+**Challenges
+
+- Troubleshooting issues with database
+- Small code errors
+
+**Next Step/s
+
+- Make pages functional and develop UI/UX
