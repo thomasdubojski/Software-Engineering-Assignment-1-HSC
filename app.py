@@ -20,8 +20,10 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.Date, default=datetime.utcnow)
 
-class Review(db.Model):
     review_id = db.relationship("Review", backref='author', lazy=True)
+
+class Review(db.Model):
+    review_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     restaurant_name = db.Column(db.String(100), nullable=False)
     cuisine_type = db.Column(db.String(100), nullable=False)
@@ -31,12 +33,10 @@ class Review(db.Model):
 
 @app.route('/')
 def home():
-    query = text('SELECT * FROM restaurants ORDER BY review_score DESC;')
-    result = connection.execute(query).fetchall()
+    reviews = Review.query.order_by(Review.created_at.desc()).all()
+    return render_template('base.html', restaurants=tastetracker_td.db)
 
-    return render_template('base.html', restaurants=result)
-
-@app.route('/')
+@app.route('/search')
 def search():
     return render_template('search.html')
 
