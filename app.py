@@ -1,18 +1,33 @@
 # importing required add-ons
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory # pyright: ignore[reportMissingImports]
-from sqlalchemy import create_engine, text # pyright: ignore[reportMissingImports]
+from flask_sqlalchemy import SQLAlchemy 
 from datetime import datetime
 
-app = Flask(__name__)
-
 # creating engine for site
-engine = create_engine('sqlite:///websitedata.db')
-connection = engine.connect()
+app = Flask(__name__)
+app.secret_key = 'key'
 
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory('uploads/', name)
+app.config["SQLALCHEMY_DATABASE_URI"]='sqlite:///tastetracker_td.db'
+app.config["SQLALCHEMY_TRACK_MODIFICATION"]=False
 
+db= SQLAlchemy(app) 
+
+#creating db schema
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.Date, default=datetime.utcnow)
+
+class Review(db.Model):
+    review_id = db.relationship("Review", backref='author', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    restaurant_name = db.Column(db.String(100), nullable=False)
+    cuisine_type = db.Column(db.String(100), nullable=False)
+    rating = db.Column(db.Text, nullable=False)
+    review_text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.Date, default=datetime.utcnow)
 
 @app.route('/')
 def home():
