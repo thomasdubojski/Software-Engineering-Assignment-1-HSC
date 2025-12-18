@@ -20,7 +20,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.Date, default=datetime.utcnow)
 
-    review_id = db.relationship("Review", backref='author', lazy=True)
+    reviews = db.relationship("Review", backref='author', lazy=True)
 
 class Review(db.Model):
     review_id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +34,7 @@ class Review(db.Model):
 @app.route('/')
 def home():
     reviews = Review.query.order_by(Review.created_at.desc()).all()
-    return render_template('base.html', restaurants=tastetracker_td.db)
+    return render_template('base.html', reviews=reviews)
 
 @app.route('/search')
 def search():
@@ -104,5 +104,10 @@ def add_review():
     connection.commit()
     
     return redirect(url_for('home'))
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()   # Creates tables if they don’t exist
+    app.run(debug=True)
 
 app.run(debug=True, reloader_type='stat', port=5000)
