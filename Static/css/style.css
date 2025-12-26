@@ -6,3 +6,54 @@ table, th, tr, td {
 td {
   text-align: center;
 }
+
+.center-text {
+    text-align: center;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #222;
+    padding: 10px 15px;
+}
+
+.nav-title {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #222;
+    position: absolute;
+    top: 55px;
+    right: 15px;
+    padding: 10px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 0;
+}
+
+.nav-links a:hover {
+    color: gold;
+}
+
+.hamburger {
+    font-size: 26px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.nav-links a.active {
+    color: rgb(255, 215, 0);
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+}

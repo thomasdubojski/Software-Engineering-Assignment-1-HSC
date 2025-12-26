@@ -6,7 +6,6 @@
     </head>
     <body>
         <h1>Filtered Restaurants</h1>
-        <img src='/static/images/banner.png' height='70'>
         <ul>
             {% for restaurant in restaurants %}
                 <li>{{ restaurant[1] }} ({{ restaurant[2] }}) - <span class=score>{{ restaurant[5] }}/10</span></li>

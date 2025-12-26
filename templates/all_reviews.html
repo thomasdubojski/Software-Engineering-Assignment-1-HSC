@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}All Reviews{% endblock %}
+
+{% block content %}
+<h1>All Reviews</h1>
+
+{% for review in reviews %}
+    <div class="review">
+        <h3>{{ review.restaurant_name }}</h3>
+        <p>Cuisine: {{ review.cuisine_type }}</p>
+
+        <p class="stars">
+            {% for i in range(review.rating) %}
+                <span class="filled">★</span>
+            {% endfor %}
+            {% for i in range(5 - review.rating) %}
+                <span class="empty">☆</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ review.review_text }}</p>
+    </div>
+{% else %}
+    <p>No reviews available.</p>
+{% endfor %}
+{% endblock %}

@@ -28,19 +28,21 @@ This satisfies the Forms requirement.
 
 I will build:
 
-- Registration form with:
+- Registration form with input for username, email and password
+- Review form with input for restaurant name, rating and review text
+- Login form with input for username and password
 
 # 4. JavaScript (Dynamic Features)
 
 This satisfies the JavaScript requirement.
 
-I will use JS for:
+I will use JS for nav menu
 
 # 5. PWA Features
 
 This is what upgrades the site into a Progressive Web App.
 
-I will create:
+I will create PWA service worker for offline functions
 
 # 6. Modular Code
 

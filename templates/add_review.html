@@ -7,25 +7,43 @@
 {% block text %}We value your contribution! Use the form below to add a new restaurant review.{% endblock %}
 
 {% block content %}
-<form action='/add_review' method='POST' enctype='multipart/form-data'>
+        <form action='/add_review' method='POST' enctype='multipart/form-data'>
             <label for='name'>Restaurant Name:</label>
-            <input type='text' id='name' name='name'><br><br>
+            <input type='text' id='name' name='name' min='0' max='5'><br><br>
 
             <label for='cuisine'>Cuisine:</label>
             <input type='text' id='cuisine' name='cuisine'><br><br>
 
-            <label for='location'>Location:</label>
-            <input type='text' id='location' name='location'><br><br>
-
-            <label for='review_score'>Review Score (1-10):</label>
-            <input type='number' id='review_score' name='review_score'><br><br>
+            <label>Rating:</label>
+            <div class="star-rating">
+                <input type="radio" name="review_score" id="star5" value="5"><label for="star5">★</label>
+                <input type="radio" name="review_score" id="star4" value="4"><label for="star4">★</label>
+                <input type="radio" name="review_score" id="star3" value="3"><label for="star3">★</label>
+                <input type="radio" name="review_score" id="star2" value="2"><label for="star2">★</label>
+                <input type="radio" name="review_score" id="star1" value="1"><label for="star1">★</label>
+                <input type="radio" name="review_score" id="star0" value="0" checked hidden>
+            </div><br><br>
 
             <label for='review_text'>Review Text:</label><br>
             <textarea id='review_text' name='review_text'></textarea><br><br>
 
-            <label for='image'>Upload Poster Image:</label>
-            <input type='file' id='image' name='image'><br><br>
-
             <input type='submit' value='Submit Review'>
         </form>
+        <style>
+        .star-rating {
+            direction: rtl;
+            display: inline-block;
+        }
+        .star-rating input[type="radio"] { display: none; }
+        .star-rating label {
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+        }
+        </style>
 {% endblock %}

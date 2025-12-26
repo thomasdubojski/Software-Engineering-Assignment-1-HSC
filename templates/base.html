@@ -3,16 +3,77 @@
     <head>
         <title>{% block title %}TasteTracker{% endblock %}</title>
         <link rel="stylesheet" href="/static/css/style.css">
+        <style>
+        .stars {
+            font-size: 24px;
+        }
+        .stars .filled {
+            color: gold;
+        }
+        .stars .empty {
+            color: black;
+        }
+        </style>
     </head>
     <body>
-        <h1>Welcome to the TasteTracker food reviewing Website</h1>
-        <!--<img src='/static/images/banner.jpg' height='384.875' width="980">-->
-        <h3>Discover and share your favorite culinary experiences!</h3>
-        <p> Click <a href='/create_account'>here</a> to create your account!</p>
-        <p><a href='/search'>Search</a></p>
+        <header class="navbar">
+            <div class="nav-title">TasteTracker</div>
+
+            <button class="hamburger" onclick="toggleMenu()">
+                ☰
+            </button>
+
+            <nav id="nav-menu" class="nav-links">
+                <a href="{{ url_for('home') }}"
+                class="{% if request.endpoint == 'home' %}active{% endif %}">
+                    Home
+                </a>
+
+                <a href="{{ url_for('all_reviews') }}"
+                class="{% if request.endpoint == 'all_reviews' %}active{% endif %}">
+                    All Reviews
+                </a>
+
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('show_form_add_review') }}"
+                    class="{% if request.endpoint == 'show_form_add_review' %}active{% endif %}">
+                        Add Review
+                    </a>
+
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('show_form_create_account') }}"
+                    class="{% if request.endpoint == 'show_form_create_account' %}active{% endif %}">
+                        Create Account
+                    </a>
+
+                    <a href="{{ url_for('show_form_login') }}"
+                    class="{% if request.endpoint == 'show_form_login' %}active{% endif %}">
+                        Login
+                    </a>
+                {% endif %}
+            </nav>
+        </header>
+        <h1 class="center-text">Welcome to the TasteTracker food reviewing Website</h1>
+        <h3 class="center-text">Discover and share your favorite culinary experiences!</h3>
         <div class="content">
             {% block content %}{% endblock %}
         </div>
-        <a href='/'>Return to Home</a>
+        <script>
+        function toggleMenu() {
+            const menu = document.getElementById("nav-menu");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+        }
+
+        document.addEventListener("click", function(event) {
+            const menu = document.getElementById("nav-menu");
+            const button = document.querySelector(".hamburger");
+
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.style.display = "none";
+            }
+        });
+        </script>
+
     </body>
 </html>

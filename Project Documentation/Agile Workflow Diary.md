@@ -85,3 +85,36 @@ Sprint/Session Focus: Start developing and structuring pages to create functiona
 **Next Step/s
 
 - Make pages functional and develop UI/UX
+
+# Agile Diary Entry 4 – Developing and Structuring Pages 
+
+Date: 26/12/25
+Sprint/Session Focus: Make pages functional and start on UI/UX
+
+**Planned
+
+- Fix and implement functioning base review system
+- Make changes working towards better UI + UX
+
+**Completed
+
+- Fixed and tested base review system, added in user only for reviews
+- Made 'add review' and 'all reviews' pages ratings appear in common star rating form that still records as integer in database
+- Added in fully functioning account creation and login, and started work on member only functions
+- Added a 'hamburger' navbar for better UI and UX, in part with top banner for aesthetics
+- Added in a all reviews viewing page accessible by both guests and members
+
+**Challenges
+
+- Troubleshooting review system
+- Difficulty with incorrect code mix up (raw sql in app.py)
+- Difficulty adding in functional system for review stars and int conversion and display
+- Setting up functional navbar
+
+**Next Step/s
+
+- Implement full guest restrictions
+- Further improve UI + UX
+- Add PWA service worker
+- Work on searching and filtering
+- Work on security (XSS and auth checks)
