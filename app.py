@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash # pyright: ignore[reportMissingImports]
 from flask import session # pyright: ignore[reportMissingImports]
 from sqlalchemy import CheckConstraint # pyright: ignore[reportMissingImports]
-import time
+from flask import flash # pyright: ignore[reportMissingImports]
 
 # creating engine for site
 app = Flask(__name__)
@@ -65,10 +65,12 @@ def login():
     # authenticating user
     if user and check_password_hash(user.password_hash, password):
         session['user_id'] = user.user_id
-        return redirect(url_for('member_page'))
+        session['username'] = user.username
+
+        return redirect(url_for('home'))
     else:
         return "Invalid credentials", 401
-
+    
 # defining logout function
 @app.route('/logout')
 def logout():
@@ -167,6 +169,56 @@ def add_review():
 def all_reviews():
     reviews = Review.query.order_by(Review.created_at.desc()).all()
     return render_template('all_reviews.html', reviews=reviews)
+
+
+@app.route('/my_reviews')
+def my_reviews():
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    reviews = Review.query.filter_by(user_id=session['user_id']).all()
+    return render_template('my_reviews.html', reviews=reviews)
+
+# defining edit review route
+@app.route('/edit_review/<int:review_id>', methods=['GET', 'POST'])
+def edit_review(review_id):
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    review = Review.query.get_or_404(review_id)
+
+    # Prevent users editing others reviews
+    if review.user_id != session['user_id']:
+        return "Unauthorized", 403
+
+    if request.method == 'POST':
+        review.restaurant_name = request.form['name']
+        review.cuisine_type = request.form['cuisine']
+        review.rating = int(request.form['review_score'])
+        review.review_text = request.form['review_text']
+
+        db.session.commit()
+        return redirect(url_for('my_reviews'))
+
+    return render_template('edit_review.html', review=review)
+
+# defining delete review route
+@app.route('/delete_review/<int:review_id>', methods=['POST'])
+def delete_review(review_id):
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    review = Review.query.get_or_404(review_id)
+
+    if review.user_id != session['user_id']:
+        return "Unauthorized", 403
+
+    db.session.delete(review)
+    db.session.commit()
+
+    flash("Review deleted successfully")
+    return redirect(url_for('my_reviews'))
+
 
 if __name__ == "__main__":
     with app.app_context():

@@ -3,6 +3,7 @@
     <head>
         <title>{% block title %}TasteTracker{% endblock %}</title>
         <link rel="stylesheet" href="/static/css/style.css">
+        <!--- CSS styles for the stars --->
         <style>
         .stars {
             font-size: 24px;
@@ -16,31 +17,67 @@
         </style>
     </head>
     <body>
+        <!--- Flash message overlay --->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div id="flash-overlay">
+            <div id="flash-box">
+                <p>{{ messages[0] }}</p>
+                <button onclick="closeFlash()">OK</button>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
         <header class="navbar">
-            <div class="nav-title">TasteTracker</div>
+            <div class="nav-title">
+                TasteTracker
+
+                <!--- Display username if logged in --->
+                {% if session.get('username') %}
+                    <span class="user-info">
+                        <span class="user-icon">👤</span>
+                        {{ session.get('username') }}
+                    </span>
+                {% endif %}
+            </div>
 
             <button class="hamburger" onclick="toggleMenu()">
                 ☰
             </button>
 
             <nav id="nav-menu" class="nav-links">
+
+                <!--- Universal hamburger menu links --->
                 <a href="{{ url_for('home') }}"
                 class="{% if request.endpoint == 'home' %}active{% endif %}">
                     Home
+                </a>
+
+                <a href="{{ url_for('search') }}"
+                class="{% if request.endpoint == 'search' %}active{% endif %}">
+                    Search
                 </a>
 
                 <a href="{{ url_for('all_reviews') }}"
                 class="{% if request.endpoint == 'all_reviews' %}active{% endif %}">
                     All Reviews
                 </a>
-
+                
+                <!--- Hamburger menu links for logged in users--->
                 {% if session.get('user_id') %}
+                    <a href="{{ url_for('my_reviews') }}"
+                    class="{% if request.endpoint == 'my_reviews' %}active{% endif %}">
+                        My Reviews
+                    </a>
+
                     <a href="{{ url_for('show_form_add_review') }}"
                     class="{% if request.endpoint == 'show_form_add_review' %}active{% endif %}">
                         Add Review
                     </a>
 
                     <a href="{{ url_for('logout') }}">Logout</a>
+                
+                <!--- Hamburger menu links for non-logged in users--->
                 {% else %}
                     <a href="{{ url_for('show_form_create_account') }}"
                     class="{% if request.endpoint == 'show_form_create_account' %}active{% endif %}">
@@ -53,13 +90,20 @@
                     </a>
                 {% endif %}
             </nav>
+
         </header>
         <h1 class="center-text">Welcome to the TasteTracker food reviewing Website</h1>
         <h3 class="center-text">Discover and share your favorite culinary experiences!</h3>
         <div class="content">
             {% block content %}{% endblock %}
         </div>
+
+        
+        <!--- Javascript --->
         <script>
+        /* =========================
+        HAMBURGER MENU
+        ========================= */
         function toggleMenu() {
             const menu = document.getElementById("nav-menu");
             menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -69,8 +113,28 @@
             const menu = document.getElementById("nav-menu");
             const button = document.querySelector(".hamburger");
 
-            if (!menu.contains(event.target) && !button.contains(event.target)) {
-                menu.style.display = "none";
+            if (menu && button) {
+                if (!menu.contains(event.target) && !button.contains(event.target)) {
+                    menu.style.display = "none";
+                }
+            }
+        });
+
+        /* =========================
+        FLASH MESSAGE
+        ========================= */
+        function closeFlash() {
+            const overlay = document.getElementById("flash-overlay");
+            if (overlay) {
+                overlay.style.display = "none";
+            }
+        }
+
+        document.addEventListener("click", function(event) {
+            const flashBox = document.getElementById("flash-box");
+
+            if (flashBox && !flashBox.contains(event.target)) {
+                closeFlash();
             }
         });
         </script>

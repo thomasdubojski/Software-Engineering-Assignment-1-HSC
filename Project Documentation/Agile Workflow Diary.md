@@ -113,8 +113,30 @@ Sprint/Session Focus: Make pages functional and start on UI/UX
 
 **Next Step/s
 
-- Implement full guest restrictions
-- Further improve UI + UX
 - Add PWA service worker
-- Work on searching and filtering
-- Work on security (XSS and auth checks)
+- Fix and implement searching and filtering
+- Add in review deletion/editing
+
+# Agile Diary Entry 5 – Furthering CRUD (Editing and Deleting) 
+
+Date: 2/1/26
+Sprint/Session Focus: Create functional system for editing and deleting reviews
+
+**Planned
+
+- Implement Edit/delete own reviews
+- Prevent deletion of reviews not made by user
+
+**Completed
+
+- Implemented edit and delete options
+- Prevention of reviews not created by user being deleted
+
+**Challenges
+
+- Making edit and delete functions work as intended
+
+**Next Step/s
+
+- Add PWA service worker
+- Fix and implement searching and filtering

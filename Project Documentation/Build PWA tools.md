@@ -1,56 +1,67 @@
 
-# Flask App Setup (Core Structure)
+## **1. Flask App Setup (Core Structure)**
 
-This is the foundation of everything.
+_Foundation of the application._
 
 I will:
 
-- Create app.py
-- Set up the first route: / (Home)
+- Create `app.py` as the main Flask application file.
+- Set up the first route / (Home) to display latest reviews or a landing page.
+- Organize routes for registration, login, review CRUD, and filtering/searching.
+- Initialize Flask, SQLAlchemy, and Flask-Login for authentication.
 
-# Jinja Templates (Modular Layout)
+## **2. Jinja Templates (Modular Layout)**
 
-This is the modular code requirement.
+_Demonstrates modular coding using templates._
 
 I will create:
 
-- base.html → shared layout (navbar, footer)
+- `base.html` with shared layout with navbar, footer, and linked CSS/JS.
+- All other templates will extend `base.html`
+- Templates include: `search.html`, `login.html`, `create_account.html`, `aa_review.html`, `filter.html`.
 
-Using:
+## **3. Forms (HTML + Flask Handling)**
 
-{% extends "base.html" %}  
-{% block content %}  
-{% endblock %}
-
-# 3. Forms (HTML + Flask Handling)
-
-This satisfies the Forms requirement.
+_Satisfies the requirement for data input._
 
 I will build:
 
-- Registration form with input for username, email and password
-- Review form with input for restaurant name, rating and review text
-- Login form with input for username and password
+- Registration form: username, email, password 
+- Login form: username/email + password 
+- Review form: restaurant name, cuisine type, rating, review text 
+- Client-side validation using JavaScript and server-side validation in Flask.
 
-# 4. JavaScript (Dynamic Features)
+## **4. JavaScript (Dynamic Features)**
 
-This satisfies the JavaScript requirement.
+_Satisfies dynamic front-end interactivity requirement._
 
-I will use JS for nav menu
+I will implement:
 
-# 5. PWA Features
+- Navigation menu toggle for mobile responsiveness.
+- Autocomplete suggestions for restaurant names in filter/search.
+- Optional: live filtering and sorting of reviews without page reload.
 
-This is what upgrades the site into a Progressive Web App.
+## **5. PWA Features**
 
-I will create PWA service worker for offline functions
+_Upgrades the site into a Progressive Web App._
 
-# 6. Modular Code
+I will:
 
-This means create a separate:
+- Create `service-worker.js` to cache static assets and pages for offline use.
+- Add `manifest.json` with app name, icons, and start URL.
+- Register the service worker in `base.html` to enable offline functionality.
 
-- templates/
-- static/css/
-- static/js/
-- app.py
+## **6. Modular Code Structure**
 
-No HTML embedded directly inside Python
+_Demonstrates separation of concerns and clean project architecture._
+
+I will maintain:
+
+- Folder structure:
+	templates/ → all HTML templates 
+	static/css/ → CSS files 
+	static/js/ → JavaScript files 
+	app.py → main application logic 
+	service-worker.js → PWA offline support 
+	models.py → database models`
+- Ensure no HTML is embedded directly in Python. All logic handled in `app.py` and rendered via templates.
