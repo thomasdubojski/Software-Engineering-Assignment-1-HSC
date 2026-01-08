@@ -1,36 +1,60 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Account{% endblock %}
-
-{% block heading %}Create your account{% endblock %}
-
-{% block text %}We value our users! Create an account below to access new perks.{% endblock %}
+{% block title %}Search Reviews{% endblock %}
 
 {% block content %}
+<h1>Search & Filter Reviews</h1>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Search Reviews</title>
-        <link rel='stylesheet' href='/static/css/style.css'>
-    </head>
-    <body>
-        <h1>Filter Restaurants</h1>
-        <form action='/filter' method='GET'>
-            <label for='cuisine'>Cuisine:</label>
-            <select id='cuisine' name='cuisine'>
-                <option value=''>Any</option>
-                
-            </select>
-            <br><br>
+<form method="GET" action="{{ url_for('search') }}">
+    <input
+        type="text"
+        name="q"
+        placeholder="Search restaurant or review text"
+        value="{{ request.args.get('q', '') }}"
+    >
 
-            <label for='score'>Minimum Review Score:</label>
-            <input type='number' id='review_score' name='review_score' min='1' max='10'>
-            <br><br>
+    <select name="cuisine">
+        <option value="">All Cuisines</option>
+        <option value="Italian">Italian</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Indian">Indian</option>
+        <option value="Turkish">Turkish</option>
+    </select>
 
-            <input type='submit' value='Filter Restaurants'>
-        </form>
-        <a href='/'>Return to Home</a>
-    </body>
-</html>
+    <select name="review_score">
+        <option value="">Any Rating</option>
+        <option value="0">0+ Stars</option>
+        <option value="1">1+ Stars</option>
+        <option value="2">2+ Stars</option>
+        <option value="3">3+ Stars</option>
+        <option value="4">4+ Stars</option>
+        <option value="5">5 Stars</option>
+    </select>
+
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+<h2>Results</h2>
+
+{% for review in reviews %}
+<div class="review">
+    <h3>{{ review.restaurant_name }}</h3>
+    <p>Cuisine: {{ review.cuisine_type }}</p>
+
+    <p class="stars">
+        {% for i in range(review.rating) %}
+            <span class="filled">★</span>
+        {% endfor %}
+        {% for i in range(5 - review.rating) %}
+            <span class="empty">☆</span>
+        {% endfor %}
+    </p>
+
+    <p>{{ review.review_text }}</p>
+</div>
+{% else %}
+<p>No matching reviews found.</p>
+{% endfor %}
 {% endblock %}

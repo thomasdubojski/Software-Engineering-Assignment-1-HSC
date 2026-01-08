@@ -140,3 +140,26 @@ Sprint/Session Focus: Create functional system for editing and deleting reviews
 
 - Add PWA service worker
 - Fix and implement searching and filtering
+
+# Agile Diary Entry 6 – Fix and Implement Searching and Filtering
+
+Date: 8/1/26
+Sprint/Session Focus: Fix and implement a functioning search and filtering system for the site
+
+**Planned
+
+- Implement search and filtering
+- Allow filtering based off cuisine, rating, ect.
+
+**Completed
+
+- Implement search and filtering
+- Allow filtering based off cuisine, rating, ect.
+
+**Challenges
+
+- Making a working filter function
+
+**Next Step/s
+
+- Add PWA service worker

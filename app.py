@@ -16,7 +16,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATION"] = False
 
 db= SQLAlchemy(app) 
 
-#creating db schema
+# creating db schema
+# users table
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -26,6 +27,7 @@ class User(db.Model):
 
     reviews = db.relationship("Review", backref='author', lazy=True)
 
+# reviews table
 class Review(db.Model):
     review_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
@@ -45,9 +47,30 @@ def home():
     return render_template('base.html', reviews=reviews)
 
 # defining search route
-@app.route('/search')
+@app.route('/search', methods=['GET'])
 def search():
-    return render_template('search.html')
+    query = request.args.get('q', '').strip()
+    cuisine = request.args.get('cuisine', '')
+    min_rating = request.args.get('review_score', '')
+
+    reviews = Review.query
+
+    if query:
+        reviews = reviews.filter(
+            (Review.restaurant_name.ilike(f"%{query}%")) |
+            (Review.review_text.ilike(f"%{query}%"))
+        )
+
+    if cuisine:
+        reviews = reviews.filter(Review.cuisine_type == cuisine)
+
+    if min_rating.isdigit():
+        reviews = reviews.filter(Review.rating >= int(min_rating))
+
+    results = reviews.order_by(Review.created_at.desc()).all()
+
+    return render_template('search.html', reviews=results)
+
 
 # defining login route
 @app.route('/login', methods=['GET'])
@@ -103,25 +126,6 @@ def create_account():
     
     return redirect(url_for('home'))
 
-# defining filter system
-@app.route('/filter', methods=['GET'])
-def filter():
-    cuisine = request.args.get('cuisine')
-    review_score = request.args.get('review_score')
-
-    query = Review.query
-
-    # filter criteria
-    if cuisine:
-        query = query.filter(Review.cuisine_type == cuisine)
-
-    if review_score:
-        query = query.filter(Review.rating >= review_score)
-
-    results = query.order_by(Review.created_at.desc()).all()
-
-    return render_template('filter.html', restaurants=results)
-
 # defining review page route
 @app.route('/add_review', methods=['GET'])
 def show_form_add_review():
@@ -142,7 +146,7 @@ def add_review():
     if not all([name, review_score]): 
         return "Missing review data", 400
 
-    # convert rating to integer and validate
+    # convert rating to integer and validating it
     try:
 
         if int(review_score) < 1 or int(review_score) > 5:
@@ -170,6 +174,15 @@ def all_reviews():
     reviews = Review.query.order_by(Review.created_at.desc()).all()
     return render_template('all_reviews.html', reviews=reviews)
 
+# this code throughout strings prevents unauthed access to certain feautures/pages
+# 
+# Not logged in at all 
+# if 'user_id' not in session:
+#        return redirect(url_for('show_form_login'))
+#
+# Incorrect account logged in
+#    if review.user_id != session['user_id']:
+#        return "Unauthorized", 403
 
 @app.route('/my_reviews')
 def my_reviews():
@@ -187,7 +200,6 @@ def edit_review(review_id):
 
     review = Review.query.get_or_404(review_id)
 
-    # Prevent users editing others reviews
     if review.user_id != session['user_id']:
         return "Unauthorized", 403
 
