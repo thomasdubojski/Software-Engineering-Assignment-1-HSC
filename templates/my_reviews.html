@@ -20,8 +20,8 @@
         {% endfor %}
     </p>
 
-    <p>{{ review.review_text }}</p>
-
+    <p>{{ review.review_text | e }}</p>
+    
     <a href="{{ url_for('edit_review', review_id=review.review_id) }}">
         Edit Review
     </a>

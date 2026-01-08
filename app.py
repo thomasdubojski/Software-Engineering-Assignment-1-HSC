@@ -37,14 +37,23 @@ class Review(db.Model):
     review_text = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.Date, default=datetime.utcnow)
     __table_args__ = (
-        CheckConstraint('rating >= 0 AND rating <= 5', name='rating_range'), # serverside rating constraint
+        CheckConstraint('rating >= 1 AND rating <= 5', name='rating_range'), # serverside rating constraint
     )
 
 # defining home route
 @app.route('/')
 def home():
-    reviews = Review.query.order_by(Review.created_at.desc()).all()
-    return render_template('base.html', reviews=reviews)
+    page = request.args.get('page', 1, type=int)
+
+    reviews = Review.query.order_by(
+        Review.created_at.desc()
+    ).paginate(page=page, per_page=8)
+
+    return render_template(
+        'base.html',
+        reviews=reviews.items,
+        pagination=reviews
+    )
 
 # defining search route
 @app.route('/search', methods=['GET'])
@@ -137,35 +146,38 @@ def add_review():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    name = request.form.get('name')
-    cuisine = request.form.get('cuisine')
-    review_score = request.form.get('review_score')
-    review_text = request.form.get('review_text')
+    name = request.form.get('name', '').strip()
+    cuisine = request.form.get('cuisine', '').strip()
+    review_score = request.form.get('review_score', '').strip()
+    review_text = request.form.get('review_text', '').strip()
 
-    # ensure required fields are present
-    if not all([name, review_score]): 
-        return "Missing review data", 400
+    # required fields validation
+    if not name or not cuisine or not review_text:
+        flash("All fields are required.")
+        return redirect(url_for('show_form_add_review'))
 
-    # convert rating to integer and validating it
+    # rating validation
     try:
-
-        if int(review_score) < 1 or int(review_score) > 5:
-            return "Rating must be between 1 and 5", 400
+        rating = int(review_score)
+        if rating < 1 or rating > 5:
+            flash("Rating must be between 1 and 5.")
+            return redirect(url_for('show_form_add_review'))
     except ValueError:
-        return "Rating must be a number", 400
+        flash("Rating must be a number.")
+        return redirect(url_for('show_form_add_review'))
 
-    # adding new review to db
     new_review = Review(
         user_id=session['user_id'],
         restaurant_name=name,
         cuisine_type=cuisine,
-        rating=int(review_score),
+        rating=rating,
         review_text=review_text
     )
 
     db.session.add(new_review)
     db.session.commit()
 
+    flash("Review added successfully!")
     return redirect(url_for('home'))
 
 # defining all reviews route
@@ -208,6 +220,15 @@ def edit_review(review_id):
         review.cuisine_type = request.form['cuisine']
         review.rating = int(request.form['review_score'])
         review.review_text = request.form['review_text']
+
+        if not review.restaurant_name or not review.cuisine_type or not review.review_text:
+            flash("All fields are required.")
+            return redirect(url_for('edit_review', review_id=review_id))
+
+        if review.rating < 1 or review.rating > 5:
+            flash("Rating must be between 1 and 5.")
+            return redirect(url_for('edit_review', review_id=review_id))
+
 
         db.session.commit()
         return redirect(url_for('my_reviews'))

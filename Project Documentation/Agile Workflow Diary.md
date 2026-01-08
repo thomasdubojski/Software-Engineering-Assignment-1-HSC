@@ -163,3 +163,26 @@ Sprint/Session Focus: Fix and implement a functioning search and filtering syste
 **Next Step/s
 
 - Add PWA service worker
+
+# Agile Diary Entry 7 – Add Service Worker
+
+Date: 8/1/26
+Sprint/Session Focus: Implement PWA service worker
+
+**Planned
+
+- Implement a PWA service worker
+
+**Completed
+
+- Implement a PWA service worker
+- Begun work on XSS prevention
+- Improved server side validation
+
+**Challenges
+
+- Improving server side validation
+
+**Next Step/s
+
+-  Improve UI and security

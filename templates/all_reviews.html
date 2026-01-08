@@ -19,7 +19,7 @@
             {% endfor %}
         </p>
 
-        <p>{{ review.review_text }}</p>
+        <p>{{ review.review_text | e }}</p>
     </div>
 {% else %}
     <p>No reviews available.</p>
