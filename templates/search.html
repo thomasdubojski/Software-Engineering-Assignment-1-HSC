@@ -6,6 +6,8 @@
 <h1>Search & Filter Reviews</h1>
 
 <form method="GET" action="{{ url_for('search') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
     <input
         type="text"
         name="q"
@@ -29,6 +31,11 @@
         <option value="3">3+ Stars</option>
         <option value="4">4+ Stars</option>
         <option value="5">5 Stars</option>
+    </select>
+
+    <select name="sort">
+        <option value="new">Newest</option>
+        <option value="rating">Top Rated</option>
     </select>
 
     <button type="submit">Search</button>

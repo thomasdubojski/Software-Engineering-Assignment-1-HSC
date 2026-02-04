@@ -76,7 +76,12 @@ def search():
     if min_rating.isdigit():
         reviews = reviews.filter(Review.rating >= int(min_rating))
 
-    results = reviews.order_by(Review.created_at.desc()).all()
+    sort = request.args.get('sort', 'new')
+
+    if sort == 'rating':
+        results = reviews.order_by(Review.rating.desc()).all()
+    else:
+        results = reviews.order_by(Review.created_at.desc()).all()
 
     return render_template('search.html', reviews=results)
 
