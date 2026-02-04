@@ -6,18 +6,36 @@
 <h1>Edit Your Review</h1>
 
 <form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 
-    <label>Restaurant Name</label><br>
-    <input type="text" name="name" value="{{ review.restaurant_name }}" required>
+    <!-- Restaurant dropdown -->
+    <label for="name">Restaurant Name</label><br>
+    <select name="name" id="name" required>
+        <option value="">Select a restaurant</option>
+        {% for r in ["McDonalds","KFC","Subway","Local Cafe","Other"] %}
+            <option value="{{ r }}" {% if review.restaurant_name == r %}selected{% endif %}>
+                {{ r }}
+            </option>
+        {% endfor %}
+    </select>
     <br><br>
 
-    <label>Cuisine Type</label><br>
-    <input type="text" name="cuisine" value="{{ review.cuisine_type }}" required>
+    <!-- Cuisine dropdown -->
+    <label for="cuisine">Cuisine Type</label><br>
+    <select name="cuisine" id="cuisine" required>
+        <option value="">Select cuisine</option>
+        {% for c in ["Italian","Chinese","Indian","Fast Food","Cafe","Other"] %}
+            <option value="{{ c }}" {% if review.cuisine_type == c %}selected{% endif %}>
+                {{ c }}
+            </option>
+        {% endfor %}
+    </select>
     <br><br>
 
+    <!-- Rating -->
     <label>Rating</label><br>
     <div class="star-rating">
-        {% for i in range(5, -1, -1) %}
+        {% for i in range(5, 0, -1) %}
             <input
                 type="radio"
                 name="review_score"
@@ -30,12 +48,25 @@
     </div>
     <br><br>
 
-    <label>Review</label><br>
-    <textarea name="review_text" rows="5" required>{{ review.review_text }}</textarea>
+    <!-- Review text -->
+    <label for="review_text">Review</label><br>
+    <textarea
+        id="review_text"
+        name="review_text"
+        rows="5"
+        maxlength="100"
+        required
+        oninput="updateCounter()"
+    >{{ review.review_text }}</textarea>
+    <div id="char-counter">0 / 100</div>
     <br><br>
 
-    <button type="submit">Save Changes</button>
-
+    <div class="review-actions">
+        <button type="submit">Save Changes</button>
+        <a href="{{ url_for('my_reviews') }}">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
 </form>
 
 <style>
@@ -48,14 +79,39 @@
 }
 .star-rating label {
     font-size: 24px;
-    color: black;
     cursor: pointer;
+    color: black;
 }
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
     color: gold;
 }
+
+#char-counter {
+    font-size: 14px;
+}
 </style>
 
+<script>
+function updateCounter() {
+    const textarea = document.getElementById("review_text");
+    const counter = document.getElementById("char-counter");
+    const max = textarea.maxLength;
+    const length = textarea.value.length;
+
+    counter.textContent = `${length} / ${max}`;
+    counter.style.color = length >= max ? "red" : "black";
+}
+
+document.querySelector("form").addEventListener("submit", function (e) {
+    const text = document.getElementById("review_text").value.trim();
+    if (text.length < 10) {
+        alert("Review must be at least 10 characters long.");
+        e.preventDefault();
+    }
+});
+
+document.addEventListener("DOMContentLoaded", updateCounter);
+</script>
 {% endblock %}

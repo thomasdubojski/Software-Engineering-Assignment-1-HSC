@@ -65,6 +65,15 @@
                 
                 <!--- Hamburger menu links for logged in users--->
                 {% if session.get('user_id') %}
+                    <a href="{{ url_for('dashboard') }}"
+                    class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('profile') }}"
+                    class="{% if request.endpoint == 'profile' %}active{% endif %}">  
+                        Profile
+                    </a>
+                    
                     <a href="{{ url_for('my_reviews') }}"
                     class="{% if request.endpoint == 'my_reviews' %}active{% endif %}">
                         My Reviews

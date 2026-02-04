@@ -7,43 +7,104 @@
 {% block text %}We value your contribution! Use the form below to add a new restaurant review.{% endblock %}
 
 {% block content %}
-        <form action='/add_review' method='POST' enctype='multipart/form-data'>
-            <label for='name'>Restaurant Name:</label>
-            <input type='text' id='name' name='name' min='0' max='5'><br><br>
+<form action="/add_review" method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 
-            <label for='cuisine'>Cuisine:</label>
-            <input type='text' id='cuisine' name='cuisine'><br><br>
+    <!-- Restaurant dropdown -->
+    <label for="name">Restaurant Name:</label>
+    <select name="name" id="name" required>
+        <option value="">Select a restaurant</option>
+        <option value="McDonalds">McDonald's</option>
+        <option value="KFC">KFC</option>
+        <option value="Subway">Subway</option>
+        <option value="Local Cafe">Local Cafe</option>
+        <option value="Other">Other</option>
+    </select>
+    <br><br>
 
-            <label>Rating:</label>
-            <div class="star-rating">
-                <input type="radio" name="review_score" id="star5" value="5"><label for="star5">★</label>
-                <input type="radio" name="review_score" id="star4" value="4"><label for="star4">★</label>
-                <input type="radio" name="review_score" id="star3" value="3"><label for="star3">★</label>
-                <input type="radio" name="review_score" id="star2" value="2"><label for="star2">★</label>
-                <input type="radio" name="review_score" id="star1" value="1"><label for="star1">★</label>
-                <input type="radio" name="review_score" id="star0" value="0" checked hidden>
-            </div><br><br>
+    <!-- Cuisine dropdown -->
+    <label for="cuisine">Cuisine:</label>
+    <select name="cuisine" id="cuisine" required>
+        <option value="">Select cuisine</option>
+        <option value="Italian">Italian</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Indian">Indian</option>
+        <option value="Fast Food">Fast Food</option>
+        <option value="Cafe">Cafe</option>
+        <option value="Other">Other</option>
+    </select>
+    <br><br>
 
-            <label for='review_text'>Review Text:</label><br>
-            <textarea id='review_text' name='review_text'></textarea><br><br>
+    <!-- Rating -->
+    <label>Rating:</label>
+    <div class="star-rating">
+        <input type="radio" name="review_score" id="star5" value="5"><label for="star5">★</label>
+        <input type="radio" name="review_score" id="star4" value="4"><label for="star4">★</label>
+        <input type="radio" name="review_score" id="star3" value="3"><label for="star3">★</label>
+        <input type="radio" name="review_score" id="star2" value="2"><label for="star2">★</label>
+        <input type="radio" name="review_score" id="star1" value="1"><label for="star1">★</label>
+        <input type="radio" name="review_score" id="star0" value="0" checked hidden>
+    </div>
+    <br><br>
 
-            <input type='submit' value='Submit Review'>
-        </form>
-        <style>
-        .star-rating {
-            direction: rtl;
-            display: inline-block;
-        }
-        .star-rating input[type="radio"] { display: none; }
-        .star-rating label {
-            font-size: 24px;
-            color: black;
-            cursor: pointer;
-        }
-        .star-rating input[type="radio"]:checked ~ label,
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: gold;
-        }
-        </style>
+    <!-- Review text -->
+    <label for="review_text">Review Text:</label><br>
+    <textarea
+        id="review_text"
+        name="review_text"
+        maxlength="100"
+        required
+        oninput="updateCounter()"
+    ></textarea>
+    <div id="char-counter">0 / 100</div>
+    <br><br>
+
+    <input type="submit" value="Submit Review">
+</form>
+
+<style>
+.star-rating {
+    direction: rtl;
+    display: inline-block;
+}
+.star-rating input {
+    display: none;
+}
+.star-rating label {
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: gold;
+}
+
+#char-counter {
+    font-size: 14px;
+}
+</style>
+
+<script>
+function updateCounter() {
+    const textarea = document.getElementById("review_text");
+    const counter = document.getElementById("char-counter");
+    const max = textarea.maxLength;
+    const length = textarea.value.length;
+
+    counter.textContent = `${length} / ${max}`;
+    counter.style.color = length >= max ? "red" : "black";
+}
+
+document.querySelector("form").addEventListener("submit", function (e) {
+    const text = document.getElementById("review_text").value.trim();
+    if (text.length < 10) {
+        alert("Review must be at least 10 characters long.");
+        e.preventDefault();
+    }
+});
+
+document.addEventListener("DOMContentLoaded", updateCounter);
+</script>
 {% endblock %}

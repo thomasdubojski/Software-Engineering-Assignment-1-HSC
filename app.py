@@ -55,6 +55,17 @@ def home():
         pagination=reviews
     )
 
+# defining dashboard route
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    # Fetch reviews (all, or just user’s, or latest)
+    reviews = Review.query.order_by(Review.created_at.desc()).limit(8).all()
+
+    return render_template('dashboard.html', reviews=reviews)
+
 # defining search route
 @app.route('/search', methods=['GET'])
 def search():
@@ -85,6 +96,10 @@ def search():
 
     return render_template('search.html', reviews=results)
 
+def get_current_user():
+    if 'user_id' in session:
+        return User.query.get(session['user_id'])
+    return None
 
 # defining login route
 @app.route('/login', methods=['GET'])
