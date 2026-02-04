@@ -8,17 +8,9 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Create Account</title>
-        <link rel="stylesheet" href="/static/css/style.css">
-    </head>
-    <body>
-        <!-- Account Creation Form -->
-        <h1>Create your Account</h1>
         <form action='/create_account' method='POST' enctype='multipart/form-data'>
-            
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
             <label for='username'>Username:</label>
             <input type='text' id='username' name='username'><br><br>
 
@@ -26,10 +18,8 @@
             <input type='text' id='email' name='email'><br><br>
 
             <label for='password'>Password:</label>
-            <input type='text' id='password' name='password'><br><br>
+            <input type='password' id='password' name='password' required><br><br>
 
             <input type='submit' value='Create Account'>
         </form>
-    </body>
-</html>
 {% endblock %}

@@ -11,6 +11,19 @@ from flask import flash # pyright: ignore[reportMissingImports]
 app = Flask(__name__)
 app.secret_key = 'key'
 
+def generate_csrf_token():
+    if '_csrf_token' not in session:
+        session['_csrf_token'] = secrets.token_hex(16)
+    return session['_csrf_token']
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
+
+def validate_csrf():
+    token = session.get('_csrf_token', None)
+    form_token = request.form.get('_csrf_token')
+    if not token or not form_token or token != form_token:
+        abort(403)
+
+
 app.config["SQLALCHEMY_DATABASE_URI"]='sqlite:///tastetracker_td.db'
 app.config["SQLALCHEMY_TRACK_MODIFICATION"] = False
 
@@ -31,8 +44,8 @@ class User(db.Model):
 class Review(db.Model):
     review_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    restaurant_name = db.Column(db.String(100), nullable=False)
-    cuisine_type = db.Column(db.String(100), nullable=True)
+    restaurant_name = db.Column(db.String(100), nullable=False, index=True)
+    cuisine_type = db.Column(db.String(100), nullable=True, index=True)
     rating = db.Column(db.Integer, nullable=False)
     review_text = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.Date, default=datetime.utcnow)
@@ -109,6 +122,7 @@ def show_form_login():
 # defining login form
 @app.route('/login', methods=['POST'])
 def login():
+    validate_csrf()
     username = request.form['username']
     password = request.form['password']
 
@@ -137,6 +151,7 @@ def show_form_create_account():
 # defining create account form
 @app.route('/create_account', methods=['POST'])
 def create_account():
+    validate_csrf()
     username = request.form['username']
     email = request.form['email']
     password = request.form['password']
@@ -163,6 +178,7 @@ def show_form_add_review():
 # defining add review form  
 @app.route('/add_review', methods=['POST'])
 def add_review():
+    validate_csrf()
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
@@ -227,6 +243,7 @@ def my_reviews():
 # defining edit review route
 @app.route('/edit_review/<int:review_id>', methods=['GET', 'POST'])
 def edit_review(review_id):
+    validate_csrf()
     if 'user_id' not in session:
         return redirect(url_for('show_form_login'))
 
@@ -258,6 +275,7 @@ def edit_review(review_id):
 # defining delete review route
 @app.route('/delete_review/<int:review_id>', methods=['POST'])
 def delete_review(review_id):
+    validate_csrf()
     if 'user_id' not in session:
         return redirect(url_for('show_form_login'))
 
