@@ -257,7 +257,96 @@ def delete_review(review_id):
     flash("Review deleted successfully")
     return redirect(url_for('my_reviews'))
 
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
 
+    user = get_current_user()
+    return render_template('profile.html', user=user)
+
+@app.route('/profile/change_password', methods=['POST'])
+def change_password():
+    validate_csrf()
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    user = get_current_user()
+
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
+    confirm_password = request.form['confirm_password']
+
+    if not check_password_hash(user.password_hash, current_password):
+        flash('Current password is incorrect.', 'error')
+        return redirect(url_for('profile'))
+
+    if new_password != confirm_password:
+        flash('New passwords do not match.', 'error')
+        return redirect(url_for('profile'))
+
+    user.password_hash = generate_password_hash(new_password)
+    db.session.commit()
+
+    flash('Password changed successfully.', 'success')
+    return redirect(url_for('profile'))
+
+@app.route('/profile/password')
+def change_password_page():
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    return render_template('change_password.html')
+
+@app.route('/profile/edit', methods=['GET', 'POST'])
+def edit_profile():
+    validate_csrf()
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    user = get_current_user()
+
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        email = request.form.get('email', '').strip()
+
+        if username and username != user.username:
+            if User.query.filter_by(username=username).first():
+                flash('Username already taken.', 'error')
+                return redirect(url_for('edit_profile'))
+            user.username = username
+            session['username'] = username
+
+        if email and email != user.email:
+            if User.query.filter_by(email=email).first():
+                flash('Email already in use.', 'error')
+                return redirect(url_for('edit_profile'))
+            user.email = email
+
+        db.session.commit()
+        flash('Profile updated.', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('edit_profile.html', user=user)
+
+@app.route('/profile/delete', methods=['POST'])
+def delete_account():
+    validate_csrf()
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    user = get_current_user()
+
+    # logout first
+    session.clear()
+
+    db.session.delete(user)
+    db.session.commit()
+
+    flash('Your account has been deleted.', 'success')
+    return redirect(url_for('home'))
+
+# runs app
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()   # Creates tables if they don’t exist

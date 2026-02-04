@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>My Profile</h1>
+
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Account Created:</strong> {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+
+<hr>
+
+<a href="{{ url_for('edit_profile') }}">
+    <button>Edit Profile</button>
+</a>
+
+<a href="{{ url_for('change_password_page') }}">
+    <button>Change Password</button>
+</a>
+
+<form method="POST"
+      action="{{ url_for('delete_account') }}"
+      onsubmit="return confirm('This will permanently delete your account. Continue?');"
+      style="margin-top: 15px;">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" style="background:red;color:white;">
+        Delete My Account
+    </button>
+</form>
+
+{% endblock %}

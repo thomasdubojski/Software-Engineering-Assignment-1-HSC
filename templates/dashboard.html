@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<h1>User Dashboard</h1>
+<p>Welcome, {{ session.username }}!
+
+</p>
+<h3>My Reviews</h3>
+
+{% if reviews %}
+<div class="review-grid">
+    {% for review in reviews %}
+        <div class="review-card">
+            <h3>{{ review.restaurant_name }}</h3>
+            <p class="cuisine">{{ review.cuisine_type }}</p>
+
+            <p class="rating">
+                ⭐ {{ review.rating }}/5
+            </p>
+
+            <p class="review-text">
+                {{ review.review_text | e }}
+            </p>
+
+            <p class="author">
+                By {{ review.author.username }}
+            </p>
+
+            <p class="date">
+                Reviewed on {{ review.created_at.strftime('%d %b %Y') }}
+            </p>
+     
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>You haven’t written any reviews yet.</p>
+{% endif %}
+
+{% if pagination %}
+<div class="pagination">
+    {% if pagination.has_prev %}
+        <a href="{{ url_for('all_reviews', page=pagination.prev_num) }}">← Prev</a>
+    {% endif %}
+
+    <span>Page {{ pagination.page }} of {{ pagination.pages }}</span>
+
+    {% if pagination.has_next %}
+        <a href="{{ url_for('all_reviews', page=pagination.next_num) }}">Next →</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
