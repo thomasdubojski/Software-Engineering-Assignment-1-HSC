@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash # pyri
 from flask import session # pyright: ignore[reportMissingImports]
 from sqlalchemy import CheckConstraint # pyright: ignore[reportMissingImports]
 from flask import flash # pyright: ignore[reportMissingImports]
+import secrets
+from flask import abort # pyright: ignore[reportMissingImports]
 
 # creating engine for site
 app = Flask(__name__)
@@ -189,7 +191,8 @@ def add_review():
 
     # required fields validation
     if not name or not cuisine or not review_text:
-        flash("All fields are required.")
+        flash("All fields are required.", "error")
+
         return redirect(url_for('show_form_add_review'))
 
     # rating validation
@@ -213,7 +216,7 @@ def add_review():
     db.session.add(new_review)
     db.session.commit()
 
-    flash("Review added successfully!")
+    flash("Review added successfully!", "success")
     return redirect(url_for('home'))
 
 # defining all reviews route
@@ -259,11 +262,11 @@ def edit_review(review_id):
         review.review_text = request.form['review_text']
 
         if not review.restaurant_name or not review.cuisine_type or not review.review_text:
-            flash("All fields are required.")
+            flash("All fields are required.", "error")
             return redirect(url_for('edit_review', review_id=review_id))
 
         if review.rating < 1 or review.rating > 5:
-            flash("Rating must be between 1 and 5.")
+            flash("Rating must be between 1 and 5.", "error")
             return redirect(url_for('edit_review', review_id=review_id))
 
 
@@ -287,7 +290,7 @@ def delete_review(review_id):
     db.session.delete(review)
     db.session.commit()
 
-    flash("Review deleted successfully")
+    flash("Review deleted successfully", "success")
     return redirect(url_for('my_reviews'))
 
 @app.route('/profile')

@@ -17,16 +17,14 @@
         </style>
     </head>
     <body>
-        <!--- Flash message overlay --->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div id="flash-overlay">
-            <div id="flash-box">
-                <p>{{ messages[0] }}</p>
-                <button onclick="closeFlash()">OK</button>
-            </div>
-        </div>
-        {% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
         {% endwith %}
         <header class="navbar">
             <div class="nav-title">
