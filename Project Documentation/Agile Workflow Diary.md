@@ -186,3 +186,78 @@ Sprint/Session Focus: Implement PWA service worker
 **Next Step/s
 
 -  Improve UI and security
+
+
+# Agile Diary Entry 8 – Add User Dashboard and Profile Management
+
+Date: 9/1/26
+Sprint/Session Focus: Implement a user dashboard and a profile management page to allow for account edits
+
+**Planned
+
+- Implement a user dashboard  
+- Implement a profile management page to allow for account edits
+
+**Completed
+
+- Implement a user dashboard  
+- Implement a profile management page to allow for account edits
+
+**Challenges
+
+- Making account edits communicate with the database
+
+**Next Step/s
+
+-  Improve UI/UX
+
+# Agile Diary Entry 9 – UI/UX Improvements on Forms
+
+Date: 13/1/26
+Sprint/Session Focus: Work on bettering the UI and UX in forms
+
+**Planned
+
+- Improve inputs
+- Limit fully autonomous inputs unless necessary using drop downs
+- Organize the display of reviews to be neater
+
+**Completed
+
+- Added drop down selections for restaurants and cuisine to limit invalid inputs 
+- Added char counter on client end so user can see how many characters are left 
+- Added in client side character limits
+- Added in grid based format for reviews with pagination 
+- Updated some pages with unneeded html 
+- Added csrf validation
+- Updated flash messages to be nicer
+
+**Challenges
+
+- Adding drop down selection menus
+
+**Next Step/s
+
+-  Continue work on service worker
+
+# Agile Diary Entry 10 – Fix PWA and Service Worker
+Date: 13/1/26
+Sprint/Session Focus: Fix PWA and Service Worker
+
+**Planned
+
+- Fix PWA
+- Fix service worker
+
+**Completed
+
+- Fix PWA
+- Fix service worker
+
+**Challenges
+
+- N/A
+
+**Next Step/s
+
+-  Finishing touches for code and documentation

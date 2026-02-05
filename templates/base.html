@@ -2,8 +2,14 @@
 <html>
     <head>
         <title>{% block title %}TasteTracker{% endblock %}</title>
+        
+        <!-- CSS -->
         <link rel="stylesheet" href="/static/css/style.css">
-        <!--- CSS styles for the stars --->
+        
+        <!-- PWA Manifest-->
+        <link rel="manifest" href="{{ url_for('static', filename = 'manifest.json') }}">
+        
+        <!--- CSS styles for stars --->
         <style>
         .stars {
             font-size: 24px;
@@ -26,6 +32,7 @@
                 </ul>
             {% endif %}
         {% endwith %}
+
         <header class="navbar">
             <div class="nav-title">
                 TasteTracker
@@ -146,11 +153,9 @@
         });
 
         /* =========================
-        SERVICE WORKER REGISTRATION
+        JavaScript
         ========================= */
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/static/service-worker.js');
-        }
+        src = "{{ url_for('static', filename='js/app.js')}}"
         </script>
 
     </body>
