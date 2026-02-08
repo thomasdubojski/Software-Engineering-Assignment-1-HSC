@@ -8,11 +8,13 @@ from sqlalchemy import CheckConstraint # pyright: ignore[reportMissingImports]
 from flask import flash # pyright: ignore[reportMissingImports]
 import secrets
 from flask import abort # pyright: ignore[reportMissingImports]
+import os
 
 # creating engine for site
 app = Flask(__name__)
-app.secret_key = 'key'
+app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
 
+# csrf protection functions
 def generate_csrf_token():
     if '_csrf_token' not in session:
         session['_csrf_token'] = secrets.token_hex(16)
@@ -36,7 +38,7 @@ db= SQLAlchemy(app)
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.Date, default=datetime.utcnow)
 
@@ -55,20 +57,27 @@ class Review(db.Model):
         CheckConstraint('rating >= 1 AND rating <= 5', name='rating_range'), # serverside rating constraint
     )
 
+# user session key
+def get_current_user():
+    if 'user_id' in session:
+        return User.query.get(session['user_id'])
+    return None
+
+# this code prevents unauthed access to certain feautures/pages
+# 
+# Not logged in at all 
+# if 'user_id' not in session:
+#        return redirect(url_for('show_form_login'))
+#
+# Incorrect account logged in
+#    if review.user_id != session['user_id']:
+#        return "Unauthorized", 403
+
 # defining home route
 @app.route('/')
 def home():
     page = request.args.get('page', 1, type=int)
-
-    reviews = Review.query.order_by(
-        Review.created_at.desc()
-    ).paginate(page=page, per_page=8)
-
-    return render_template(
-        'base.html',
-        reviews=reviews.items,
-        pagination=reviews
-    )
+    return render_template('base.html', page=page)
 
 # defining dashboard route
 @app.route('/dashboard')
@@ -76,9 +85,7 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('show_form_login'))
 
-    # Fetch reviews (all, or just user’s, or latest)
-    reviews = Review.query.order_by(Review.created_at.desc()).limit(8).all()
-
+    reviews = Review.query.filter_by(user_id=session['user_id']).all()
     return render_template('dashboard.html', reviews=reviews)
 
 # defining search route
@@ -110,11 +117,6 @@ def search():
         results = reviews.order_by(Review.created_at.desc()).all()
 
     return render_template('search.html', reviews=results)
-
-def get_current_user():
-    if 'user_id' in session:
-        return User.query.get(session['user_id'])
-    return None
 
 # defining login route
 @app.route('/login', methods=['GET'])
@@ -225,35 +227,17 @@ def all_reviews():
     reviews = Review.query.order_by(Review.created_at.desc()).all()
     return render_template('all_reviews.html', reviews=reviews)
 
-# this code throughout strings prevents unauthed access to certain feautures/pages
-# 
-# Not logged in at all 
-# if 'user_id' not in session:
-#        return redirect(url_for('show_form_login'))
-#
-# Incorrect account logged in
-#    if review.user_id != session['user_id']:
-#        return "Unauthorized", 403
-
-@app.route('/my_reviews')
-def my_reviews():
-    if 'user_id' not in session:
-        return redirect(url_for('show_form_login'))
-
-    reviews = Review.query.filter_by(user_id=session['user_id']).all()
-    return render_template('my_reviews.html', reviews=reviews)
-
 # defining edit review route
 @app.route('/edit_review/<int:review_id>', methods=['GET', 'POST'])
 def edit_review(review_id):
-    validate_csrf()
     if 'user_id' not in session:
         return redirect(url_for('show_form_login'))
 
     review = Review.query.get_or_404(review_id)
 
     if review.user_id != session['user_id']:
-        return "Unauthorized", 403
+        flash('You do not have permission to edit this review.', 'error')
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         review.restaurant_name = request.form['name']
@@ -271,7 +255,7 @@ def edit_review(review_id):
 
 
         db.session.commit()
-        return redirect(url_for('my_reviews'))
+        return redirect(url_for('dashboard'))
 
     return render_template('edit_review.html', review=review)
 
@@ -285,14 +269,16 @@ def delete_review(review_id):
     review = Review.query.get_or_404(review_id)
 
     if review.user_id != session['user_id']:
-        return "Unauthorized", 403
+        flash('You do not have permission to delete this review.', 'error')
+        return redirect(url_for('home'))
 
     db.session.delete(review)
     db.session.commit()
 
     flash("Review deleted successfully", "success")
-    return redirect(url_for('my_reviews'))
+    return redirect(url_for('dashboard'))
 
+# defining profile route
 @app.route('/profile')
 def profile():
     if 'user_id' not in session:
@@ -301,6 +287,16 @@ def profile():
     user = get_current_user()
     return render_template('profile.html', user=user)
 
+# defining change password route
+@app.route('/profile/password')
+def change_password_page():
+    if 'user_id' not in session:
+        return redirect(url_for('show_form_login'))
+
+    user = get_current_user()
+    return render_template('change_password.html', user=user)
+
+# defining change password form
 @app.route('/profile/change_password', methods=['POST'])
 def change_password():
     validate_csrf()
@@ -327,16 +323,9 @@ def change_password():
     flash('Password changed successfully.', 'success')
     return redirect(url_for('profile'))
 
-@app.route('/profile/password')
-def change_password_page():
-    if 'user_id' not in session:
-        return redirect(url_for('show_form_login'))
-
-    return render_template('change_password.html')
-
+# defining edit profile route
 @app.route('/profile/edit', methods=['GET', 'POST'])
 def edit_profile():
-    validate_csrf()
     if 'user_id' not in session:
         return redirect(url_for('show_form_login'))
 
@@ -365,6 +354,7 @@ def edit_profile():
 
     return render_template('edit_profile.html', user=user)
 
+# defining delete account route
 @app.route('/profile/delete', methods=['POST'])
 def delete_account():
     validate_csrf()

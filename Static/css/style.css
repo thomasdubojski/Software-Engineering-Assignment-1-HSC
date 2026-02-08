@@ -112,7 +112,7 @@ td {
 }
 
 .flash-messages li {
-    background-color: #ffc107; /* Yellow / warning color */
+    background-color: #ffc107;
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 3px;

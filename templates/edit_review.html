@@ -12,7 +12,7 @@
     <label for="name">Restaurant Name</label><br>
     <select name="name" id="name" required>
         <option value="">Select a restaurant</option>
-        {% for r in ["McDonalds","KFC","Subway","Local Cafe","Other"] %}
+        {% for r in ["McDonalds", "KFC", "Subway", "Dominos", "Hungry Jack's", "Red Rooster", "Thai House", "Cafe 1876", "Ribs & Burgers", "The Fish Place", "Sizzler", "Wok On Inn", "Pizza Capers", "The Oriental", "The Bathurst Club", "The Royal Hotel", "Bistro 88", "Ritzy's Restaurant", "La Petite Maison", "Other"] %}
             <option value="{{ r }}" {% if review.restaurant_name == r %}selected{% endif %}>
                 {{ r }}
             </option>
@@ -24,7 +24,7 @@
     <label for="cuisine">Cuisine Type</label><br>
     <select name="cuisine" id="cuisine" required>
         <option value="">Select cuisine</option>
-        {% for c in ["Italian","Chinese","Indian","Fast Food","Cafe","Other"] %}
+        {% for c in ["Italian", "Chinese", "Indian", "Thai", "Japanese", "Cafe", "Fast Food", "Mexican", "Vietnamese", "Other"] %}
             <option value="{{ c }}" {% if review.cuisine_type == c %}selected{% endif %}>
                 {{ c }}
             </option>
@@ -63,7 +63,7 @@
 
     <div class="review-actions">
         <button type="submit">Save Changes</button>
-        <a href="{{ url_for('my_reviews') }}">
+        <a href="{{ url_for('dashboard') }}">
             <button type="button">Cancel</button>
         </a>
     </div>

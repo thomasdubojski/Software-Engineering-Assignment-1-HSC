@@ -32,56 +32,32 @@
                 </ul>
             {% endif %}
         {% endwith %}
-
+        
+        <!-- Hamburger menu -->
         <header class="navbar">
-            <div class="nav-title">
-                TasteTracker
-
-                <!--- Display username if logged in --->
-                {% if session.get('username') %}
-                    <span class="user-info">
-                        <span class="user-icon">👤</span>
-                        {{ session.get('username') }}
-                    </span>
-                {% endif %}
-            </div>
+            <div class="nav-title"> TasteTracker </div>
 
             <button class="hamburger" onclick="toggleMenu()">
                 ☰
             </button>
 
             <nav id="nav-menu" class="nav-links">
-
-                <!--- Universal hamburger menu links --->
-                <a href="{{ url_for('home') }}"
-                class="{% if request.endpoint == 'home' %}active{% endif %}">
-                    Home
-                </a>
-
-                <a href="{{ url_for('search') }}"
-                class="{% if request.endpoint == 'search' %}active{% endif %}">
-                    Search
-                </a>
-
-                <a href="{{ url_for('all_reviews') }}"
-                class="{% if request.endpoint == 'all_reviews' %}active{% endif %}">
-                    All Reviews
-                </a>
                 
                 <!--- Hamburger menu links for logged in users--->
                 {% if session.get('user_id') %}
+                    <a href="{{ url_for('home') }}"
+                    class="{% if request.endpoint == 'home' %}active{% endif %}">
+                        Home
+                    </a>
+                
                     <a href="{{ url_for('dashboard') }}"
                     class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
                         Dashboard
                     </a>
+
                     <a href="{{ url_for('profile') }}"
                     class="{% if request.endpoint == 'profile' %}active{% endif %}">  
                         Profile
-                    </a>
-                    
-                    <a href="{{ url_for('my_reviews') }}"
-                    class="{% if request.endpoint == 'my_reviews' %}active{% endif %}">
-                        My Reviews
                     </a>
 
                     <a href="{{ url_for('show_form_add_review') }}"
@@ -93,16 +69,33 @@
                 
                 <!--- Hamburger menu links for non-logged in users--->
                 {% else %}
-                    <a href="{{ url_for('show_form_create_account') }}"
-                    class="{% if request.endpoint == 'show_form_create_account' %}active{% endif %}">
-                        Create Account
-                    </a>
+                    <a href="{{ url_for('home') }}"
+                    class="{% if request.endpoint == 'home' %}active{% endif %}">
+                        Home
+                    </a>    
 
                     <a href="{{ url_for('show_form_login') }}"
                     class="{% if request.endpoint == 'show_form_login' %}active{% endif %}">
                         Login
                     </a>
+
+                    <a href="{{ url_for('show_form_create_account') }}"
+                    class="{% if request.endpoint == 'show_form_create_account' %}active{% endif %}">
+                        Create Account
+                    </a>
                 {% endif %}
+
+                <!--- Universal hamburger menu links --->
+
+                <a href="{{ url_for('search') }}"
+                class="{% if request.endpoint == 'search' %}active{% endif %}">
+                    Search
+                </a>
+
+                <a href="{{ url_for('all_reviews') }}"
+                class="{% if request.endpoint == 'all_reviews' %}active{% endif %}">
+                    All Reviews
+                </a>
             </nav>
 
         </header>
@@ -111,12 +104,11 @@
         <div class="content">
             {% block content %}{% endblock %}
         </div>
-
         
         <!--- Javascript --->
         <script>
         /* =========================
-        HAMBURGER MENU
+        Hamburger Menu
         ========================= */
         function toggleMenu() {
             const menu = document.getElementById("nav-menu");
@@ -135,7 +127,7 @@
         });
 
         /* =========================
-        FLASH MESSAGE
+        Flash Messages
         ========================= */
         function closeFlash() {
             const overlay = document.getElementById("flash-overlay");
