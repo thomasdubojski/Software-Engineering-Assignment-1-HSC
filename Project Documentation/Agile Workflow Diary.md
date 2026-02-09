@@ -62,7 +62,7 @@ Sprint/Session Focus: Fix and implement functioning venv, install needed addons 
 
 
 
-# Agile Diary Entry 4 – Developing and Structuring Pages 
+# Agile Diary Entry 3 – Adding Improved Database Schema
 
 Date: 15/12/25 + 18/12/25  
 Sprint/Session Focus: Start developing and structuring pages to create functional base website
@@ -241,7 +241,7 @@ Sprint/Session Focus: Work on bettering the UI and UX in forms
 -  Continue work on service worker
 
 # Agile Diary Entry 10 – Fix PWA and Service Worker
-Date: 13/1/26
+Date: 5/2/26
 Sprint/Session Focus: Fix PWA and Service Worker
 
 **Planned
@@ -251,8 +251,8 @@ Sprint/Session Focus: Fix PWA and Service Worker
 
 **Completed
 
-- Fix PWA
-- Fix service worker
+- Fixed PWA
+- Fixed service worker
 
 **Challenges
 
@@ -261,3 +261,22 @@ Sprint/Session Focus: Fix PWA and Service Worker
 **Next Step/s
 
 -  Finishing touches for code and documentation
+
+# Agile Diary Entry 11 – Final Adjustments/Refinements
+Date: 9/2/26
+Sprint/Session Focus: Final code touch ups
+
+**Planned
+
+- Code refinements
+
+**Completed
+
+- Updated app key
+- Replaced raw 403 errors with flash message errors
+- Expanded options for cuisine and restaurants
+- Removed my reviews in favor for dashboard showing your reviews
+
+**Challenges
+
+- N/A
